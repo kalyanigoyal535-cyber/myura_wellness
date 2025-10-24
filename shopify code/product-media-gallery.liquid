@@ -1,0 +1,231 @@
+
+
+<div class="product-gallery">
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const thumbs = document.querySelectorAll(".product-thumbs .thumb");
+      const mainImage = document.querySelector(".product-main-image img");
+
+      thumbs.forEach(button => {
+        button.addEventListener("click", function() {
+          const largeUrl = this.getAttribute("data-large");
+          const alt = this.querySelector("img").getAttribute("alt");
+
+          mainImage.setAttribute("src", largeUrl);
+          mainImage.setAttribute("alt", alt);
+
+          // highlight active thumb
+          thumbs.forEach(b => b.classList.remove("active"));
+          this.classList.add("active");
+        });
+      });
+    });
+  </script>
+
+  <style>
+    .product-gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .product-main-image {
+      flex: 1 1 65%;
+      text-align: center;
+    }
+    .product-main-image img {
+      max-width: 100%;
+      height: auto;
+    }
+    .product-thumbs {
+      flex: 0 0 120px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .product-thumbs .thumb {
+      border: none;
+      padding: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+    .product-thumbs .thumb.active img {
+      outline: 2px solid #000;
+    }
+    /* Mobile layout: thumbnails below main image */
+    @media (max-width: 768px) {
+      .product-gallery {
+        flex-direction: column;
+      }
+      .product-thumbs {
+        order: 2; /* below */
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .product-thumbs .thumb img {
+        width: 60px;
+        height: 60px;
+      }
+      .product-main-image {
+        order: 1;
+      }
+    }
+  </style>
+
+  <!-- Main image -->
+  <div class="product-main-image">
+    {%- if product.featured_image -%}
+      {%- assign featured_large = product.featured_image | img_url: '1024x1024' -%}
+      <img
+        id="main-product-image"
+        src="{{ featured_large }}"
+        width="1024"
+        height="1024"
+        alt="{{ product.title | escape }}"
+        loading="eager"
+        decoding="async"
+      >
+    {%- endif -%}
+  </div>
+
+  <div class="product-thumbs" role="tablist" aria-label="{{ 'products.product.media.thumbnails' | t }}">
+    {%- for media in product.media -%}
+      {%- if media.media_type == 'image' -%}
+        {%- assign thumb_url = media | img_url: '200x200' -%}
+        {%- assign large_url = media | img_url: '1024x1024' -%}
+        <button
+          type="button"
+          class="thumb{% if forloop.first %} active{% endif %}"
+          data-large="{{ large_url }}"
+          aria-label="{{ 'products.product.media.load_image' | t: index: forloop.index }}"
+        >
+          <img
+            src="{{ thumb_url }}"
+            width="200"
+            height="200"
+            alt="{{ media.alt | escape }}"
+            loading="lazy"
+            decoding="async"
+          >
+        </button>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+  <style>
+  /* Base gallery layout */
+  .product-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .product-main-image {
+    flex: 1 1 65%;
+    text-align: center;
+  }
+  .product-main-image img {
+    max-width: 100%;
+    height: auto;
+  }
+  .product-thumbs {
+    flex: 0 0 120px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .product-thumbs .thumb {
+    border: none;
+    padding: 1px;
+    background: transparent;
+    cursor: pointer;
+  }
+  .product-thumbs .thumb.active img {
+    outline: 2px solid #000;
+  }
+
+  @media (max-width: 768px) {
+    /* kill vertical padding inside the buttons */
+    .product-thumbs .thumb {
+      padding: 0 !important;     /* remove button padding */
+      margin: 0 !important;      /* optional: remove margins */
+      background: none !important; /* optional: no bg */
+    }
+  
+    /* also make sure the images fill the button */
+    .product-thumbs .thumb img {
+      display: block;
+      width: 70px;
+      height: 70px;
+    }
+  }
+  
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // your existing thumb switching code here …
+
+  // === Simple Amazon-style zoom on hover ===
+  const mainImage = document.getElementById("main-product-image");
+
+  // wrap the image in a container with overflow hidden
+  const zoomContainer = mainImage.parentElement;
+  zoomContainer.style.overflow = "hidden";
+  zoomContainer.style.position = "relative";
+
+  // apply transform on mouse move
+  mainImage.style.transition = "transform 0.2s ease";
+  mainImage.style.transformOrigin = "center center";
+
+  zoomContainer.addEventListener("mousemove", function (e) {
+    const rect = zoomContainer.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    mainImage.style.transformOrigin = `${x}% ${y}%`;
+    mainImage.style.transform = "scale(2)"; // adjust zoom level here
+  });
+
+  zoomContainer.addEventListener("mouseleave", function () {
+    mainImage.style.transform = "scale(1)";
+    mainImage.style.transformOrigin = "center center";
+  });
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const mainImage = document.getElementById("main-product-image");
+
+  if (window.innerWidth <= 768) { // only for mobile
+    let zoomed = false;
+    let startX, startY, x = 0, y = 0;
+
+    mainImage.addEventListener("touchstart", function (e) {
+      if (!zoomed) {
+        mainImage.style.transform = "scale(2)";
+        zoomed = true;
+        mainImage.style.cursor = "grabbing";
+        startX = e.touches[0].clientX - x;
+        startY = e.touches[0].clientY - y;
+      } else {
+        mainImage.style.transform = "scale(1) translate(0px, 0px)";
+        zoomed = false;
+        x = 0;
+        y = 0;
+        mainImage.style.cursor = "grab";
+      }
+    });
+
+    mainImage.addEventListener("touchmove", function (e) {
+      if (zoomed) {
+        e.preventDefault(); // prevent scrolling while dragging
+        x = e.touches[0].clientX - startX;
+        y = e.touches[0].clientY - startY;
+        mainImage.style.transform = `scale(2) translate(${x}px, ${y}px)`;
+      }
+    });
+  }
+});
+</script>
+
+
+
+</div>

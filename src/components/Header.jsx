@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, NavLink } from "react-router-dom"; // added
-
+import images from "../images/image";
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [bgColor, setBgColor] = useState("transparent");
@@ -75,7 +75,7 @@ export default function Header() {
       <div className="max-w-6xl mx-auto px-2 py-3 flex items-center justify-between">
         {/* Logo */}
         <Link to="/">
-          <img src="/Myura_logo.avif" alt="Myura" className="w-24 h-12 object-contain" />
+          <img src={images.blackLogo} alt="Myura" className="w-24 h-12 object-contain" />
         </Link>
 
         {/* Desktop Nav */}
