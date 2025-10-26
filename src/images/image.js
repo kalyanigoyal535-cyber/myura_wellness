@@ -1,4 +1,4 @@
-import blackLogo from "../images/LogoBlack.png";
+import blackLogo from "../images/Logo-02.png";
 
 const images = {
     blackLogo,
