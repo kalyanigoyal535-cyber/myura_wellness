@@ -20,21 +20,21 @@ export default function FeaturedProducts() {
     AOS.refresh();
   }, []);
 
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 800,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    responsive: [
-      { breakpoint: 1024, settings: { slidesToShow: 3 } },
-      { breakpoint: 768, settings: { slidesToShow: 2 } },
-      { breakpoint: 480, settings: { slidesToShow: 1 } }
-    ],
-    arrows: true,
-    autoplay: true,
-    autoplaySpeed: 3000,
-  };
+ const settings = {
+  dots: true,
+  infinite: true,
+  speed: 800,
+  slidesToShow: 4,
+  slidesToScroll: 1,
+  responsive: [
+    { breakpoint: 1280, settings: { slidesToShow: 3 } },
+    { breakpoint: 1024, settings: { slidesToShow: 2 } },
+    { breakpoint: 768, settings: { slidesToShow: 1 } } // <— bumped from 480 → 768
+  ],
+  arrows: true,
+  autoplay: true,
+  autoplaySpeed: 3000,
+};
 
   return (
     <section className="py-16 bg-emerald-50">
