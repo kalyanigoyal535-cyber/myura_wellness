@@ -57,20 +57,21 @@ export default function Hero() {
       }}
     >
       {/* Hero Image */}
-      <motion.div
-        className="absolute inset-0 transition-opacity duration-700 ease-in-out"
-        style={{
-          backgroundImage: isMobile
-            ? "url('/assets/Banner12.jpg')"
-            : "url('/assets/HomeWebsiteBanner-2.jpg')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          width: '100%',
-          height: '100%',
-          opacity: showPopup ? 0.5 : 1
-        }}
-      ></motion.div>
+   <motion.div
+  className="absolute top-0 left-0 right-0 bottom-0 transition-opacity duration-700 ease-in-out"
+  style={{
+    backgroundImage: isMobile
+      ? "url('/assets/Banner12.jpg')"
+      : "url('/assets/HomeWebsiteBanner-2.jpg')",
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    width: '100%',
+    height: '100%',
+    opacity: showPopup ? 0.5 : 1
+  }}
+></motion.div>
+
 
       {/* Optional gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-emerald-900/10 via-white/10 to-white/10"></div>
